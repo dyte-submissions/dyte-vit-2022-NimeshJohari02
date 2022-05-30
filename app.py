@@ -1,4 +1,3 @@
-# read csv 
 import csv
 from dbm.ndbm import library
 import os
@@ -29,7 +28,7 @@ def getNodeModulesFile(url):
      data_json = json.loads(response.read())
      return data_json
 
-dependencies = getNodeModulesFile("https://github.com/dyte-in/react-sample-app")['dependencies'];
+#dependencies = getNodeModulesFile("https://github.com/dyte-in/react-sample-app")['dependencies'];
 
 librariesList = []
 
@@ -38,13 +37,19 @@ for _, value in parser.parse_args()._get_kwargs():
         print(value)
         librariesList = value[1:]
 #Check Whether required Libraries are present in the list
-libraryDictionary={}
+inputDict={}
 for library in librariesList:
     #split string at @ symbol as name and val
     libraryName = library.split('@')[0]
     libraryVersion = library.split('@')[1]
-    libraryDictionary[libraryName] = libraryVersion
+    inputDict[libraryName] = libraryVersion
 
-
-def getLibraryFromGithub():
-    
+#reading dataset.csv
+links=[]
+with open('Dataset.csv', 'r') as csvfile:
+    csvreader = csv.reader(csvfile , delimiter=',')
+    i=1
+    for row in csvreader:
+        links.append(row[1])
+links=links[1:]
+print(links)
