@@ -1,7 +1,8 @@
 import csv
 from dbm.ndbm import library
 import json
-import json, requests 
+import json, requests
+import os 
 # For args
 import argparse
 from urllib.request import urlopen
@@ -13,6 +14,12 @@ parser = argparse.ArgumentParser(description=msg)
 parser.add_argument('-u' , '--update' , help="Update the Dependancy CLI"  , nargs='?' )
 parser.add_argument('-i', '--input', help='File to be read', nargs='+' , required=True)
 args = parser.parse_args()
+
+def getRawURL(url):
+    url+="/blob/main/package.json"
+    modifiedURL = url.replace('github.com', 'raw.githubusercontent.com');
+    modifiedURL = modifiedURL.replace('/blob/', '/');
+    return modifiedURL
 
 def getNodeModulesFile(url):
     # github username from env FIle
@@ -71,3 +78,10 @@ for link in links:
             print("Library " + library + " is not present in the Repository " + link)
     print("\n")
 
+
+# Handling the update command
+# Use githubCLI to open a pr with the changes
+if args.update:
+    print("Updating the Dependancy CLI")
+    #integrating githubCLI for fetching private as well as private repositories 
+    curlCommand = 'curl -LJO '+getRawURL("")
