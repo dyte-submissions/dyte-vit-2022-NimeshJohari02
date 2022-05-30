@@ -44,4 +44,7 @@ for library in librariesList:
     libraryName = library.split('@')[0]
     libraryVersion = library.split('@')[1]
     libraryDictionary[libraryName] = libraryVersion
-print(libraryDictionary);
+
+
+def getLibraryFromGithub():
+    
