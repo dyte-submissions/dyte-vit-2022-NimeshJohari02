@@ -1,17 +1,14 @@
 import csv
 from dbm.ndbm import library
-import os
-import sys
 import json
-import pandas as pd
-import json, requests, urllib, io
+import json, requests 
 # For args
 import argparse
 from urllib.request import urlopen
 
 
 # taking command line input 
-msg="Welcome to the Dyte CLI . Your reliable dependabot clone without the annoying Notifications :) ";
+msg="Welcome to the Dyte Dependency CLI . Your reliable dependabot clone without the annoying Notifications :) ";
 parser = argparse.ArgumentParser(description=msg)
 parser.add_argument('-u' , '--update' , help="Update the Dependancy CLI"  , nargs='?' )
 parser.add_argument('-i', '--input', help='File to be read', nargs='+' , required=True)
@@ -46,10 +43,30 @@ for library in librariesList:
 
 #reading dataset.csv
 links=[]
+def matchString(s1 , s2):
+    if s1 in s2:
+        return True
+    else:
+        return False
+
 with open('Dataset.csv', 'r') as csvfile:
     csvreader = csv.reader(csvfile , delimiter=',')
     i=1
     for row in csvreader:
         links.append(row[1])
 links=links[1:]
-print(links)
+#iterate over the links 
+for link in links:
+    print("For Repository with the Link " + link)
+    deps = getNodeModulesFile(link)['dependencies']
+    #iterate over given libraries to find if deps are present
+    for library in inputDict:
+        if library in deps:
+            if inputDict[library] == deps[library]:
+                print(library + " is present in the Repository and version Match "  )
+            else:
+                print( library + " Existing Version" + deps[library] + "Needed Version" + inputDict[library])
+        else:
+            print("Library " + library + " is not present in the Repository " + link)
+    print("\n")
+
