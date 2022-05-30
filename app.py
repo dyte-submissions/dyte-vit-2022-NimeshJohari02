@@ -2,11 +2,11 @@ import csv
 from dbm.ndbm import library
 import json
 import json, requests
+import wget
 import os 
 # For args
 import argparse
 from urllib.request import urlopen
-
 
 # taking command line input 
 msg="Welcome to the Dyte Dependency CLI . Your reliable dependabot clone without the annoying Notifications :) ";
@@ -20,7 +20,13 @@ def getRawURL(url):
     modifiedURL = url.replace('github.com', 'raw.githubusercontent.com');
     modifiedURL = modifiedURL.replace('/blob/', '/');
     return modifiedURL
-
+def downloadPackageJSON(url):
+    raw = getRawURL(url)
+    print(raw)
+    #get name of repo from url
+    repoName = url.split('/')[-1]
+    name = wget.download(raw , out="./json/"+repoName+"package.json")
+         
 def getNodeModulesFile(url):
     # github username from env FIle
      url+="/blob/main/package.json"
@@ -85,3 +91,5 @@ if args.update:
     print("Updating the Dependancy CLI")
     #integrating githubCLI for fetching private as well as private repositories 
     curlCommand = 'curl -LJO '+getRawURL("")
+    pass
+downloadPackageJSON("https://github.com/dyte-in/react-sample-app")
