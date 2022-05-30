@@ -62,7 +62,8 @@ for link in links:
     #iterate over given libraries to find if deps are present
     for library in inputDict:
         if library in deps:
-            if inputDict[library] == deps[library]:
+            #remove first char from deps[library]
+            if inputDict[library] == deps[library].split('^')[1]:
                 print(library + " is present in the Repository and version Match "  )
             else:
                 print( library + " Existing Version" + deps[library] + "Needed Version" + inputDict[library])
