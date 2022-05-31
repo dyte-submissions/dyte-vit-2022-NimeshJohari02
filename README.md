@@ -14,17 +14,16 @@ it is for this reason that i have decided to use native libraries for the follow
 <br>
 <br>
 <ul>
-####<li> getting args from the cli </li>
-####<li> parsing the args and storing them using lists</li>
-####<li> not using libraries like pandas or numpy which increase the overall size of the dependencies thus making the entire service charge more . </li>
-####<li>trying to fetch the </li>
-####<li>Fetching only package.json from the given URL's </li>
-####<li> Using github CLI (gh) to fetch the files from the given URL's</li>
+<li> getting args from the cli </li>
+<li> parsing the args and storing them using lists</li>
+<li> not using libraries like pandas or numpy which increase the overall size of the dependencies thus making the entire service charge more . </li>
+<li>trying to fetch the </li>
+<li>Fetching only package.json from the given URL's </li>
+<li> Using github CLI (gh) to fetch the files from the given URL's</li>
+To install gh use the following command:
+<br>(For Mine and Arch Based Machines :) 
 <br>
-#### To install gh use the following command:
-###<br>(For Mine and Arch Based Machines :) 
-<br>
-##<pre class="code-block "><code>sudo pacman -S github-cli
+<pre class="code-block "><code>sudo pacman -S github-cli
 </div>
 
 <!-- Usage -->
