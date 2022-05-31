@@ -8,7 +8,7 @@ to run the code first make sure you get the required libraries installed.
 <pre class="code-block "><code>pip install -r requirements.txt 
 </div>
 <!-- large text div -->
-##<div class="large-text-div">
+<div class="large-text-div">
 Since we are planning to run this as a microservice the lesser the storage space and the files it has to fetch it better .
 it is for this reason that i have decided to use native libraries for the following:
 <br>
@@ -23,32 +23,25 @@ it is for this reason that i have decided to use native libraries for the follow
 To install gh use the following command:
 <br>(For Mine and Arch Based Machines :) 
 <br>
-<pre class="code-block "><code>sudo pacman -S github-cli
+<pre class="code-block "><code>sudo pacman -S github-cli</pre>
 </div>
 
 <!-- Usage -->
-<div class="large-text-div">
 <h2>Usage</h2>
 For Subtask 1 :
 Fetching Dependency and its version from the given URL's Use the below Command 
-<pre class="code-block "><code> python app.py -i Dataset.csv axios@0.24.0 
-</div>
+<pre class="code-block "><code> python app.py -i Dataset.csv axios@0.24.0 </pre>
 Output
-<div class="large-text-div">
 <!-- image -->
 <img src="./images/subtask1.png" alt="Subtask1 SS">
-</div>
 <!-- Large Text -->
-<div class="large-text-div">
 For information Fetching ie subtask 2
 Use the Following command
 <pre class="code-block "><code> python app.py -u true -i Dataset.csv axios@0.25.8 nodemon@2.1.1
 </pre>
 Output
-<div class="large-text-div">
 <!-- image -->
 <img src="./images/subtask2.png" alt="Subtask2 SS">
-</div>
 
 <br>
 <br>

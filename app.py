@@ -1,6 +1,5 @@
 import csv
 from dbm.ndbm import library
-import json
 import json, requests
 from pickle import TRUE
 import os 
@@ -8,6 +7,8 @@ import os
 import argparse
 from urllib.request import urlopen
 import subprocess
+
+os.environ["GITHUB_USERNAME"] = "nimeshjohari02"
 
 def runcmd(cmd, verbose = False, *args, **kwargs):
 
@@ -47,7 +48,6 @@ def getNodeModulesFile(url):
      data_json = json.loads(response.read())
      return data_json
 
-#dependencies = getNodeModulesFile("https://github.com/dyte-in/react-sample-app")['dependencies'];
 
 librariesList = []
 
@@ -77,7 +77,18 @@ with open('Dataset.csv', 'r') as csvfile:
     for row in csvreader:
         links.append(row[1])
 links=links[1:]
-#iterate over the links 
+# create a dictionary of links and their unmet dependencies
+# I need a datastructure that would allow me to store the unmet dependencies for each link
+# i need to create a dictionary with the links as keys and the dependencies as values
+def downloadFile(link):      
+    name = link.split('/')[-1];
+    print(link)
+    print(name)
+    print(getRawURL(link))
+    cmd = "curl " + getRawURL(link)+" --create-dirs -o jsonFiles/"+name+"/package.json"
+    runcmd(cmd , verbose=TRUE);
+
+
 for link in links:
     print("For Repository with the Link " + link)
     deps = getNodeModulesFile(link)['dependencies']
@@ -88,7 +99,9 @@ for link in links:
             if inputDict[library] == deps[library].split('^')[1]:
                 print(library + " is present in the Repository and version Match "  )
             else:
+
                 print( library + " Existing Version" + deps[library] + "Needed Version" + inputDict[library])
+
         else:
             print("Library " + library + " is not present in the Repository " + link)
     print("\n")
@@ -98,19 +111,17 @@ for link in links:
 # Use githubCLI to open a pr with the changes
 
 #get repo name from link
-def downloadFile(link):      
-    name = link.split('/')[-1];
-    cmd = "curl " + getRawURL(link)+" --create-dirs -o jsonFiles/"+name+"/package.json"
-    runcmd(cmd , verbose=TRUE);
+for link in links:
+    downloadFile(link)
+    #get repo name from link
 
 if args.update:
-    print("Updating the Dependancy CLI")
-    #integrating githubCLI for fetching private as well as private repositories 
-    #Downloading package.json for each repository
+    print("Updating Dependencies");
+    #fork the repo 
     for link in links:
-        downloadFile(link)
-    # now changing the package.json file to update dependency from inputDict
-    for link in links:
+        cmd ="gh repo fork "+link;
+        runcmd(cmd , verbose=TRUE);
+        forkedUrl = link.replace('github.com', 'github.com/'+os.environ['GITHUB_USERNAME']);
         name = link.split('/')[-1];
         #open the package.json file
         with open('jsonFiles/'+name+'/package.json', 'r') as f:
@@ -131,5 +142,7 @@ if args.update:
         name = link.split('/')[-1];
         cmd = "gh pr create -m 'Update Dependency' -t 'Update Dependency' -r "+name+" -f jsonFiles/"+name+"/package.json"
         runcmd(cmd , verbose=TRUE);
-        runcmd("rm -rf jsonFiles")
+        #runcmd("rm -rf jsonFiles")
         print("Dependancy CLI Updated")
+
+
