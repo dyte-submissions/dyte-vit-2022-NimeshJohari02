@@ -97,16 +97,39 @@ for link in links:
 # Handling the update command
 # Use githubCLI to open a pr with the changes
 
-if args.update:
-    print("Updating the Dependancy CLI")
-    #integrating githubCLI for fetching private as well as private repositories 
-    curlCommand = 'curl -LJO '+getRawURL("")
-    pass
-
 #get repo name from link
 def downloadFile(link):      
     name = link.split('/')[-1];
     cmd = "curl " + getRawURL(link)+" --create-dirs -o jsonFiles/"+name+"/package.json"
     runcmd(cmd , verbose=TRUE);
 
-downloadFile("https://github.com/dyte-in/react-sample-app")
+if args.update:
+    print("Updating the Dependancy CLI")
+    #integrating githubCLI for fetching private as well as private repositories 
+    #Downloading package.json for each repository
+    for link in links:
+        downloadFile(link)
+    # now changing the package.json file to update dependency from inputDict
+    for link in links:
+        name = link.split('/')[-1];
+        #open the package.json file
+        with open('jsonFiles/'+name+'/package.json', 'r') as f:
+            data = json.load(f)
+        #iterate over the inputDict
+        for library in inputDict:
+            if library in data['dependencies']:
+                #remove first char from deps[library]
+                data['dependencies'][library] = inputDict[library]
+            else:
+                data['dependencies'][library] = inputDict[library]
+        #write the changes to the file
+        with open('jsonFiles/'+name+'/package.json', 'w') as f:
+            json.dump(data, f)
+    # now using gh to open a PR with the changes
+    #get Repository name 
+    for link in links:
+        name = link.split('/')[-1];
+        cmd = "gh pr create -m 'Update Dependency' -t 'Update Dependency' -r "+name+" -f jsonFiles/"+name+"/package.json"
+        runcmd(cmd , verbose=TRUE);
+        runcmd("rm -rf jsonFiles")
+        print("Dependancy CLI Updated")
