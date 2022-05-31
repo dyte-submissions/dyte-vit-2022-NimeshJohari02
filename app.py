@@ -2,11 +2,26 @@ import csv
 from dbm.ndbm import library
 import json
 import json, requests
-import wget
+from pickle import TRUE
 import os 
 # For args
 import argparse
 from urllib.request import urlopen
+import subprocess
+
+def runcmd(cmd, verbose = False, *args, **kwargs):
+
+    process = subprocess.Popen(
+        cmd,
+        stdout = subprocess.PIPE,
+        stderr = subprocess.PIPE,
+        text = True,
+        shell = True
+    )
+    std_out, std_err = process.communicate()
+    if verbose:
+        print(std_out.strip(), std_err)
+    pass
 
 # taking command line input 
 msg="Welcome to the Dyte Dependency CLI . Your reliable dependabot clone without the annoying Notifications :) ";
@@ -20,12 +35,6 @@ def getRawURL(url):
     modifiedURL = url.replace('github.com', 'raw.githubusercontent.com');
     modifiedURL = modifiedURL.replace('/blob/', '/');
     return modifiedURL
-def downloadPackageJSON(url):
-    raw = getRawURL(url)
-    print(raw)
-    #get name of repo from url
-    repoName = url.split('/')[-1]
-    name = wget.download(raw , out="./json/"+repoName+"package.json")
          
 def getNodeModulesFile(url):
     # github username from env FIle
@@ -87,9 +96,17 @@ for link in links:
 
 # Handling the update command
 # Use githubCLI to open a pr with the changes
+
 if args.update:
     print("Updating the Dependancy CLI")
     #integrating githubCLI for fetching private as well as private repositories 
     curlCommand = 'curl -LJO '+getRawURL("")
     pass
-downloadPackageJSON("https://github.com/dyte-in/react-sample-app")
+
+#get repo name from link
+def downloadFile(link):      
+    name = link.split('/')[-1];
+    cmd = "curl " + getRawURL(link)+" --create-dirs -o jsonFiles/"+name+"/package.json"
+    runcmd(cmd , verbose=TRUE);
+
+downloadFile("https://github.com/dyte-in/react-sample-app")

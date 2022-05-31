@@ -1,5 +1,24 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=7943245&assignment_repo_type=AssignmentRepo)
-<div id="top"></div>
+<div id="top">
+To run the code first Make sure you get the required libraries installed.
+<br>
+<br>
+<a href="https://www.python.org/downloads/">https://www.python.org/downloads/</a>
+<!-- code block -->
+<pre class="code-block "><code>pip install -r requirements.txt 
+</div>
+<!-- Large Text DIv -->
+<div class="large-text-div">
+Since are planning to run this as a microservice the lesser the storage space and the files it has to fetch it better .
+It is for this reason that I have decided to use native libraries for the following:
+<br>
+<br>
+<ul>
+<li> Getting args from the CLI </li>
+<li> Parsing the args and Storing them using Lists</li>
+<li> Not using Libraries like Pandas or Numpy which increase the overall size of the dependencies</li>
+<li>Trying to fetch the </li>
+</div>
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request
