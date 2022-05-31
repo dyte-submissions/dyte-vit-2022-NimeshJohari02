@@ -136,13 +136,15 @@ if args.update:
         #write the changes to the file
         with open('jsonFiles/'+name+'/package.json', 'w') as f:
             json.dump(data, f)
-    # now using gh to open a PR with the changes
-    #get Repository name 
-    for link in links:
-        name = link.split('/')[-1];
-        cmd = "gh pr create -m 'Update Dependency' -t 'Update Dependency' -r "+name+" -f jsonFiles/"+name+"/package.json"
+        #commit the changes
+        cmd="git add ."
         runcmd(cmd , verbose=TRUE);
-        #runcmd("rm -rf jsonFiles")
-        print("Dependancy CLI Updated")
+        cmd="git commit -m 'Updating Dependencies'"
+        runcmd(cmd , verbose=TRUE);
+        cmd="git push origin master"
+        runcmd(cmd , verbose=TRUE);
+        #open a PR
+        cmd="gh pr open -m 'Updating Dependencies' -t 'Updating Dependencies' -b 'Updating Dependencies' -r "+forkedUrl
+        runcmd(cmd , verbose=TRUE);
 
 
