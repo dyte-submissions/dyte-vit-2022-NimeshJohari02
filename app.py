@@ -141,6 +141,8 @@ if args.update:
         runcmd(cmd , verbose=TRUE);
         cmd="git commit -m 'Updating Dependencies'"
         runcmd(cmd , verbose=TRUE);
+        # generate remote from forkedURL
+        cmd="git remote add origin "+forkedUrl
         cmd="git push origin master"
         runcmd(cmd , verbose=TRUE);
         #open a PR
