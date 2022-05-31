@@ -29,7 +29,7 @@ To install gh use the following command:
 
 <!-- Made With Love -->
 <div class="made-with-love">
-Made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="github.com/NimeshJohari02">Nimesh Johari</a>
+Made with <i class="fa fa-heart" aria-hidden="true"><3</i> by <a href="github.com/NimeshJohari02">Nimesh Johari</a>
 </div>
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
