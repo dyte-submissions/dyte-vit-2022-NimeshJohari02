@@ -126,6 +126,35 @@ python appv2.py -u true -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@1
 ![App Screenshot](./images/Updatepr.png)
 
 
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+<!-- CONTACT -->
+## Contact
+
+Nimesh Kumar Johari - [@github](https://github.com/NimeshJohari02) - nimeshjohari95@gmail.com
+
+Project Link: [https://github.com/dyte-submissions/dyte-vit-2022-NimeshJohari02](https://github.com/github_username/repo_namehttps://github.com/dyte-submissions/dyte-vit-2022-NimeshJohari02)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
 ## Badges
 
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
