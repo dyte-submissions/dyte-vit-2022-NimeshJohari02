@@ -1,7 +1,9 @@
+from cProfile import run
 import csv
 from dbm.ndbm import library
 from doctest import REPORT_CDIFF
 import json, requests
+from pip import main
 from pickle import TRUE
 import os 
 import argparse
@@ -15,7 +17,7 @@ from json import dumps
 
 load_dotenv();
 g = Github(os.getenv('GITHUB_AUTH_TOKEN'));
-
+username = os.getenv('GITHUB_USERNAME');
 
 
 def runcmd(cmd, verbose = False, *args, **kwargs):
@@ -94,9 +96,27 @@ def downloadFile(link):
     cmd = "curl " + getRawURL(link)+" --create-dirs -o jsonFiles/"+name+"/package.json"
     runcmd(cmd , verbose=TRUE);
 
+def convertBase64ToJson(base64):
+    return json.loads(base64)
+
+# This function is to get packagejson for private repositories 
+
+def getPackageJson(link):
+    name = link.split('/')[-1];
+    repo = g.get_repo(username + "/" + name);
+    pjson = repo.get_contents("package.json")
+    # get base64 encoded content
+    base64 = pjson.decoded_content
+    # convert base64 to json
+    json_data = convertBase64ToJson(base64)
+    return json_data  
+
 for link in links:
     print("For Repository with the Link " + link)
-    deps = getNodeModulesFile(link)['dependencies']
+    try:
+        deps = getNodeModulesFile(link)['dependencies']
+    except:
+        deps = getPackageJson(link)['dependencies']    
     #iterate over given libraries to find if deps are present
     for library in inputDict:
         if library in deps:
@@ -165,11 +185,17 @@ if args.update:
         cmd = "cd jsonFiles/"+name+" && git add package.json && git commit -m 'updated dependencies' && git push origin main"
         runcmd(cmd , verbose=TRUE);
         #open pull request using pygithub
-        username = os.getenv('GITHUB_USERNAME');
-        repo = g.get_repo(username+'/'+name)
         organisation_name = getCompanyName(link);
-        print(organisation_name)
-        # repo.create_pull(title="Update Dependencies", body="Update Dependencies", head=username+":main" , base = organisation_name+":main")
+        repo = g.get_repo(username+'/'+name)
+        #create a pull request using pygithub
+        try:
+            pr = repo.create_pull(title="Update Dependencies", body="Update Dependencies", head=organisation_name+':main', base='main')
+        # catch 
+        except Exception as e:
+            print(e);
+            print("Pull Request Already Exists")
+        #pr ="""gh api --method POST -H "Accept: application/vnd.github.v3+json" /repos/{}/{}/pulls -f title='Dependency Update' -f body='Please pull these awesome changes in!' -f head='{}:{}' -f base={}""".format(organisation_name,name,username,name,'main');
+        # runcmd(pr , verbose=TRUE);
         #delete from local Storage
         cmd = "rm -rf jsonFiles/"+name
         runcmd(cmd , verbose=TRUE);
