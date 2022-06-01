@@ -1,14 +1,22 @@
 import csv
 from dbm.ndbm import library
+from doctest import REPORT_CDIFF
 import json, requests
 from pickle import TRUE
 import os 
-# For args
 import argparse
 from urllib.request import urlopen
 import subprocess
+from dotenv import load_dotenv
+from github import Github
+from base64 import b64encode
+from json import dumps
 
-os.environ["GITHUB_USERNAME"] = "nimeshjohari02"
+
+load_dotenv();
+g = Github(os.getenv('GITHUB_AUTH_TOKEN'));
+
+
 
 def runcmd(cmd, verbose = False, *args, **kwargs):
     process = subprocess.Popen(
@@ -49,7 +57,6 @@ def getNodeModulesFile(url):
 
 
 librariesList = []
-
 for _, value in parser.parse_args()._get_kwargs():
     if value is not None:
         print(value)
@@ -87,7 +94,6 @@ def downloadFile(link):
     cmd = "curl " + getRawURL(link)+" --create-dirs -o jsonFiles/"+name+"/package.json"
     runcmd(cmd , verbose=TRUE);
 
-
 for link in links:
     print("For Repository with the Link " + link)
     deps = getNodeModulesFile(link)['dependencies']
@@ -98,7 +104,6 @@ for link in links:
             if inputDict[library] == deps[library].split('^')[1]:
                 print(library + " is present in the Repository and version Match "  )
             else:
-
                 print( library + " Existing Version" + deps[library] + "Needed Version" + inputDict[library])
 
         else:
@@ -106,13 +111,34 @@ for link in links:
     print("\n")
 
 
-# Handling the update command
-# Use githubCLI to open a pr with the changes
+def getRepositoryName(link):
+    name = link.split('/')[-1]
+    return name 
 
 #get repo name from link
-for link in links:
-    downloadFile(link)
+def performShallowClone(link):
+    name = link.split('/')[-1];
     #get repo name from link
+    cmd = "git clone " + link + " --depth 1 --branch main --single-branch jsonFiles/"+name
+    runcmd(cmd , verbose=TRUE);
+
+# def getPackageJSON(link):
+#     name = getRepositoryName(link);
+#     repository =g.get_repo(os.getenv('GITHUB_USERNAME')+'/'+name)
+#     content = repository.get_contents('package.json')
+#     print(content);
+#     base64_string = content.decode('utf-8')
+#     json_data = dumps(base64_string, indent=2)
+#     return json_data
+
+def getForkURLFromURL(link):
+    name = link.split('/')[-1];
+    modifiedLink = "https://github.com/"+os.getenv('GITHUB_USERNAME')+"/"+name;
+    return modifiedLink
+
+def getCompanyName(link):
+    name = link.split('/')[-2];
+    return name
 
 if args.update:
     print("Updating Dependencies");
@@ -120,8 +146,10 @@ if args.update:
     for link in links:
         cmd ="gh repo fork "+link;
         runcmd(cmd , verbose=TRUE);
-        forkedUrl = link.replace('github.com', 'github.com/'+os.environ['GITHUB_USERNAME']);
-        name = link.split('/')[-1];
+        #get fork url
+        name = getRepositoryName(link);
+        str = getForkURLFromURL(link);
+        performShallowClone(str)
         #open the package.json file
         with open('jsonFiles/'+name+'/package.json', 'r') as f:
             data = json.load(f)
@@ -129,22 +157,19 @@ if args.update:
         for library in inputDict:
             if library in data['dependencies']:
                 #remove first char from deps[library]
-                data['dependencies'][library] = inputDict[library]
-            else:
-                data['dependencies'][library] = inputDict[library]
+                data['dependencies'][library] = "^"+inputDict[library]
         #write the changes to the file
         with open('jsonFiles/'+name+'/package.json', 'w') as f:
             json.dump(data, f)
         #commit the changes
-        cmd="git add ."
+        cmd = "cd jsonFiles/"+name+" && git add package.json && git commit -m 'updated dependencies' && git push origin main"
         runcmd(cmd , verbose=TRUE);
-        cmd="git commit -m 'Updating Dependencies'"
-        runcmd(cmd , verbose=TRUE);
-        # generate remote from forkedURL
-        cmd="git remote add "+name+forkedUrl
-        runcmd(cmd , verbose=TRUE);
-        cmd="git push "+name+" main" 
-        runcmd(cmd , verbose=TRUE);
-        #open a PR
-        cmd="gh pr open -m 'Updating Dependencies' -t 'Updating Dependencies' -b 'Updating Dependencies' -r "+forkedUrl
+        #open pull request using pygithub
+        username = os.getenv('GITHUB_USERNAME');
+        repo = g.get_repo(username+'/'+name)
+        organisation_name = getCompanyName(link);
+        print(organisation_name)
+        # repo.create_pull(title="Update Dependencies", body="Update Dependencies", head=username+":main" , base = organisation_name+":main")
+        #delete from local Storage
+        cmd = "rm -rf jsonFiles/"+name
         runcmd(cmd , verbose=TRUE);
