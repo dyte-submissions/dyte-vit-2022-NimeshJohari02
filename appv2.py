@@ -115,23 +115,29 @@ if args.update:
         name = getRepositoryName(link)
         #Get Forked Repo
         forked_repo = g.get_repo(username + "/" + getRepositoryName(link))
-        fored_repo_link = forked_repo.html_url
-        jsonData = getPackageJson(fored_repo_link);
+        forked_repo_link = forked_repo.html_url
+        jsonData = getPackageJson(forked_repo_link);
         packjson = forked_repo.get_contents("package.json")
         for library in inputDict:
             if library in jsonData['dependencies']:
                 #remove first char from deps[library]
                 jsonData['dependencies'][library] = "^"+inputDict[library]
         #write the changes to the file
-        print(jsonData)
-        #commit the changes
-        forked_repo.update_file("package.json", "Updating Dependencies", json.dumps(jsonData), packjson.sha, branch="main")
+        pull_request_url="";        
+        branchName="update_"+library+"_"+inputDict[library];
+        mainBranch = forked_repo.get_branch('main');
+        forked_repo.create_git_ref('refs/heads/'+branchName, mainBranch.commit.sha)
+        forked_repo.update_file("package.json", "update_"+library+"_"+inputDict[library], json.dumps(jsonData, indent=4), packjson.sha)
+        try:
+            repo.create_pull(title="Update "+library+" to "+inputDict[library], body="Update "+library+" to "+inputDict[library], base="main", head=username+":"+branchName)
+            pull_request_url = repo.get_pulls()[0].html_url
+        except Exception as e:
+            print(e);
         #Open Pull Request 
         #pr = forked_repo.create_pull(title="Update Dependencies", body="Update Dependencies", head="main", base="main")
         #get Pull Request URL
-        #pull_request_url = repo.get_pulls()[0].html_url
         #Add to table 
-        #table.append([name, library, inputDict[library], pull_request_url])
-    print(tabulate(table, headers=['Repository Name', 'Library', 'Required Version', 'Pull Request URL']))
+        table.append([name, library, inputDict[library], pull_request_url])
+        print(tabulate(table, headers=['Repository Name', 'Library', 'Required Version', 'Pull Request URL']))
     #clear table
     table = []
