@@ -201,8 +201,7 @@ if args.update:
         #create a pull request using pygithub
         try:
             #create pr from deps to master
-            cmd="""curl -u """+ username+""":"""+auth_token+""" -X POST -H "Accept: application/vnd.github.v3+json"  https://api.github.com/repos/"""+organisation_name+"/"+name+"""/pulls -d '{"title":"Amazing new feature","body":"Please pull these awesome changes in!","head":"""+'"'+username+":"+branchName+'"'+""","base":"main"}'""";
-            print(cmd);
+            cmd="""curl -u """+ username+""":"""+auth_token+""" -X POST -H "Accept: application/vnd.github.v3+json"  https://api.github.com/repos/"""+organisation_name+"/"+name+"""/pulls -d '{"title":"Update Dependency ","body":"Update Dependencies","head":"""+'"'+username+":"+branchName+'"'+""","base":"main"}'""";
             runcmd(cmd , verbose=TRUE);
         except Exception as e:
             print(e);
@@ -212,3 +211,8 @@ if args.update:
         #delete from local Storage
         cmd = "rm -rf jsonFiles/"+name
         runcmd(cmd , verbose=TRUE);
+        # Check For Already Made PR 
+        print("Checking for Pull Requests in Each Repository")
+        cmd = "gh pr list "+username+"/"+name+" | grep -i 'update_"+library+"_"+inputDict[library]+"'";
+        runcmd(cmd , verbose=TRUE);
+        
