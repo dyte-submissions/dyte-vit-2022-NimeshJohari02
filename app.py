@@ -18,6 +18,7 @@ from json import dumps
 load_dotenv();
 g = Github(os.getenv('GITHUB_AUTH_TOKEN'));
 username = os.getenv('GITHUB_USERNAME');
+auth_token = os.getenv('GITHUB_AUTH_TOKEN');
 
 
 def runcmd(cmd, verbose = False, *args, **kwargs):
@@ -190,16 +191,19 @@ if args.update:
         with open('jsonFiles/'+name+'/package.json', 'w') as f:
             json.dump(data, f)
         #commit the changes to another branch
-        cmd = "cd jsonFiles/"+name+" && git checkout -b deps &&  git add package.json && git commit -m 'updated dependencies' && git push --force origin deps"
+        #generate name for branch
+        branchName = "update_"+library+"_"+inputDict[library]
+        cmd = "cd jsonFiles/"+name+" && git checkout -b" +branchName+"&&  git add package.json && git commit -m 'updated dependencies' && git push --force origin "+branchName
         runcmd(cmd , verbose=TRUE);
         #open pull request using pygithub
         organisation_name = getCompanyName(link);
-        repo = g.get_repo(organisation_name+'/'+name)
+        #repo = g.get_repo(username+'/'+name)
         #create a pull request using pygithub
         try:
             #create pr from deps to master
-            pr = repo.create_pull(title="Update Dependencies", body="Update Dependencies", head=username+':deps', base='main')
-        # catch 
+            cmd="""curl -u """+ username+""":"""+auth_token+""" -X POST -H "Accept: application/vnd.github.v3+json"  https://api.github.com/repos/"""+organisation_name+"/"+name+"""/pulls -d '{"title":"Amazing new feature","body":"Please pull these awesome changes in!","head":"""+'"'+username+":"+branchName+'"'+""","base":"main"}'""";
+            print(cmd);
+            runcmd(cmd , verbose=TRUE);
         except Exception as e:
             print(e);
             print("Pull Request Already Exists")
