@@ -1,6 +1,6 @@
 
 # Dyte ToolKit Submission 
-##DependaTroll
+## DependaTroll
 Your friendly neighborhood Dependabot clone . Just without the annoying mails and notifications :)
 Yeah also light weight :-).
 To get started just type dependatroll --help 
