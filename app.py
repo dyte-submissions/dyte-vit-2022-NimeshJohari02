@@ -11,7 +11,6 @@ import subprocess
 os.environ["GITHUB_USERNAME"] = "nimeshjohari02"
 
 def runcmd(cmd, verbose = False, *args, **kwargs):
-
     process = subprocess.Popen(
         cmd,
         stdout = subprocess.PIPE,
@@ -142,11 +141,10 @@ if args.update:
         cmd="git commit -m 'Updating Dependencies'"
         runcmd(cmd , verbose=TRUE);
         # generate remote from forkedURL
-        cmd="git remote add origin "+forkedUrl
-        cmd="git push origin master"
+        cmd="git remote add "+name+forkedUrl
+        runcmd(cmd , verbose=TRUE);
+        cmd="git push "+name+" main" 
         runcmd(cmd , verbose=TRUE);
         #open a PR
         cmd="gh pr open -m 'Updating Dependencies' -t 'Updating Dependencies' -b 'Updating Dependencies' -r "+forkedUrl
         runcmd(cmd , verbose=TRUE);
-
-
