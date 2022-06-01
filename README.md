@@ -8,11 +8,14 @@ To get started just type dependatroll --help
 
 # Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+export `GITHUB_AUTH_TOKEN`="AUTH_TOKEN"
 
-`GITHUB_AUTH_TOKEN`
+export `GITHUB_USERNAME`="USERNAME"
 
-`GITHUB_USERNAME`
+
+# Binary Location 
+
+## dist/DependaTroll
 
 # First Version (app.py)
 In the First Version of the script ie app.py We have shallow Cloned all the repositories from the CSV file . 
@@ -88,11 +91,12 @@ Install dependencies
 
 
 # Usage/Examples
-
-```python
+To make executable use 
+``` chmod +x DependaTroll```
+```sh
 # To check for unmet dependencies use the following command 
 
-python appv2.py -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
+DependaTroll -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
 
 #Add any number of Libraries and Versions Seperated by " " and Versions by "@"
 
@@ -103,10 +107,10 @@ python appv2.py -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
 ![App Screenshot](./images/subtask1Second.png)
 
 
-```python
+```sh
 # To check for updation of the unmet dependencies use the following command 
 
-python appv2.py -u true -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
+DependaTroll appv2.py -u true -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
 
 #Add any number of Libraries and Versions Seperated by " " and Versions by "@"
 

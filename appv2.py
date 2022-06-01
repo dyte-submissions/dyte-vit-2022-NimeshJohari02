@@ -46,7 +46,7 @@ for library in librariesList:
 #reading dataset.csv
 links=[]
 
-with open('Dataset.csv', 'r') as csvfile:
+with open(args.input[0], 'r') as csvfile:
     csvreader = csv.reader(csvfile , delimiter=',')
     i=1
     for row in csvreader:
