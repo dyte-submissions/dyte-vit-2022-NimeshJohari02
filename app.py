@@ -111,12 +111,14 @@ def getPackageJson(link):
     json_data = convertBase64ToJson(base64)
     return json_data  
 
+
 for link in links:
     print("For Repository with the Link " + link)
     try:
         deps = getNodeModulesFile(link)['dependencies']
     except:
         deps = getPackageJson(link)['dependencies']    
+
     #iterate over given libraries to find if deps are present
     for library in inputDict:
         if library in deps:
@@ -141,7 +143,10 @@ def performShallowClone(link):
     #get repo name from link
     cmd = "git clone " + link + " --depth 1 --branch main --single-branch jsonFiles/"+name
     runcmd(cmd , verbose=TRUE);
-
+def clonePrivateRepo(link):
+    name = link.split('/')[-1];
+    cmd ="gh repo clone "+username+":"+name +" jsonFiles/"+name
+    runcmd(cmd , verbose=TRUE);
 # def getPackageJSON(link):
 #     name = getRepositoryName(link);
 #     repository =g.get_repo(os.getenv('GITHUB_USERNAME')+'/'+name)
@@ -169,7 +174,10 @@ if args.update:
         #get fork url
         name = getRepositoryName(link);
         str = getForkURLFromURL(link);
-        performShallowClone(str)
+        try:
+            performShallowClone(str)
+        except:
+            clonePrivateRepo(str)
         #open the package.json file
         with open('jsonFiles/'+name+'/package.json', 'r') as f:
             data = json.load(f)
@@ -181,15 +189,16 @@ if args.update:
         #write the changes to the file
         with open('jsonFiles/'+name+'/package.json', 'w') as f:
             json.dump(data, f)
-        #commit the changes
-        cmd = "cd jsonFiles/"+name+" && git add package.json && git commit -m 'updated dependencies' && git push origin main"
+        #commit the changes to another branch
+        cmd = "cd jsonFiles/"+name+" && git checkout -b deps &&  git add package.json && git commit -m 'updated dependencies' && git push --force origin deps"
         runcmd(cmd , verbose=TRUE);
         #open pull request using pygithub
         organisation_name = getCompanyName(link);
-        repo = g.get_repo(username+'/'+name)
+        repo = g.get_repo(organisation_name+'/'+name)
         #create a pull request using pygithub
         try:
-            pr = repo.create_pull(title="Update Dependencies", body="Update Dependencies", head=organisation_name+':main', base='main')
+            #create pr from deps to master
+            pr = repo.create_pull(title="Update Dependencies", body="Update Dependencies", head=username+':deps', base='main')
         # catch 
         except Exception as e:
             print(e);
