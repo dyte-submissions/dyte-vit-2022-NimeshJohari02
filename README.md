@@ -54,7 +54,7 @@ python app.py -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
 #Add any number of Libraries and Versions Seperated by " " and Versions by "@"
 
 ```
-![App Screenshot](./images/subtask1First.png)
+![App Screenshot](./images/subtask.png)
 
 
 ![App Screenshot](./images/subtask1Second.png)
@@ -68,7 +68,7 @@ python app.py -u true -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.
 #Add any number of Libraries and Versions Seperated by " " and Versions by "@"
 
 ```
-## Output For subtask 1
+## Output For subtask 2
 ![App Screenshot](./images/subtask2First.png)
 
 
