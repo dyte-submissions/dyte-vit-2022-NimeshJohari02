@@ -110,7 +110,7 @@ DependaTroll -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
 ```sh
 # To check for updation of the unmet dependencies use the following command 
 
-DependaTroll appv2.py -u true -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
+DependaTroll -u true -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
 
 #Add any number of Libraries and Versions Seperated by " " and Versions by "@"
 
