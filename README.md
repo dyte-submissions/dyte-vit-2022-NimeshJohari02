@@ -1,167 +1,133 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=7943245&assignment_repo_type=AssignmentRepo)
-<div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
+
+# Dyte ToolKit Submission 
+## DependaTroll
+Your friendly neighborhood Dependabot clone . Just without the annoying mails and notifications :)
+Yeah also light weight :-).
+To get started just type dependatroll --help 
+![App Screen](./images/Help.png)
+
+# Environment Variables
+
+export `GITHUB_AUTH_TOKEN`="AUTH_TOKEN"
+
+export `GITHUB_USERNAME`="USERNAME"
+
+
+# Binary Location 
+
+## dist/DependaTroll
+
+# First Version (app.py)
+In the First Version of the script ie app.py We have shallow Cloned all the repositories from the CSV file . 
+This is the first version of the script even though it is complete and working . It is not the most optimal way out there as it required extra bandwidth to clone all the repositories. And then use the bash/zsh shell of the host machine to run the script.
+This was not only time and space intensive but also needed to have certain dependencies like git and github CLI to be installed on the host machine . Which is not the case for most of the people.
+<!-- Create List -->
+# WorkFlow For The First Version
+<ul>
+<li>Parse the CLI ARGS</li>
+<li>Raw Content Fetched Using Curl </li>
+<li>For Updates the Repositories Forked Using gh cli </li>
+<li>Then the forked repositories were cloned to a depth == 1 and moved to the folder for JSON File</li>
+<li>Then the corresponding Dependency changes were made and added to List </li>
+<li>Table made using tabulate</li>
+<li> This version had un-necessary dependencies and was not the most optimal way out there</li>
+</ul>
+
+# Second Version(appv2.py)
+
+In the second version of the script ie appv2.py We have not cloned any of the repositories completely . Only fetched the package.json file . This method is much more efficient and less bandwidth intensive. As it does not pull the entire repository. As in some cases the repositories would be very large . Thus eliminating the network overhead of cloning the repository.Could save both time and money .
+
+#### It is for the same reason of performance that I have not used libraries such as pandas for csv manipulation as the storage overhead might overway the cost . 
+# Workflow for the Second Version
+<ul>
+<li>Parse the CLI ARGS</li>
+<li>Json file fetched Using PyGithub GetContent allowing us to fetch only one file</li>
+<li>Made changes in package.json</li>
+<li>Tabulate the changes using tabulate</li>
+<li>Forking the repository achieved by PyGithub</li>
+<li>Creating a new Branch For every Dependancy Update</li>
+<li>Creating Pull Request and Fetching URL for that Request to Append to the Table </li>
+
+## Screenshots
+
+
+### For the first subtask ie checking dependencies .
+
+![App Screenshot](./images/subtask1.png)
+
+
+### For the subtask 2 ie Updating dependencies
+
+
+![App Screenshot](./images/subtask2.png)
+
+
+### Final Table After Updations 
+
+
+![App Screenshot](./images/finalTable.png)
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/dyte-submissions/dyte-vit-2022-NimeshJohari02
+```
+
+Go to the project directory
+
+```bash
+  cd dyte-vit-2022-NimeshJohari02/
+```
+
+Install dependencies
+
+```bash
+    pip install -r requirements.txt
+```
 
 
 
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+
+# Usage/Examples
+To make executable use 
+``` chmod +x DependaTroll```
+```sh
+# To check for unmet dependencies use the following command 
+
+DependaTroll -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
+
+#Add any number of Libraries and Versions Seperated by " " and Versions by "@"
+
+```
+![App Screenshot](./images/subtask1.png)
 
 
-
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
-<h3 align="center">project_title</h3>
-
-  <p align="center">
-    project_description
-    <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
-  </p>
-</div>
+![App Screenshot](./images/subtask1Second.png)
 
 
+```sh
+# To check for updation of the unmet dependencies use the following command 
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+DependaTroll -u true -i Dataset.csv axios@0.24.012 node@16.2 react@16.6 ejs@12.1
+
+#Add any number of Libraries and Versions Seperated by " " and Versions by "@"
+
+```
+## Output For subtask 2
+![App Screenshot](./images/subtask2First.png)
 
 
+![App Screenshot](./images/subtask2Second.png)
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+## Updated dependencies look like these 
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![App Screenshot](./images/UpdateDeps.png)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+## Pull Request Once Created Can Also be seen from Github
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-### Built With
-
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#top">back to top</a>)</p>
+![App Screenshot](./images/Updatepr.png)
 
 
 
@@ -182,50 +148,20 @@ Don't forget to give the project a star! Thanks again!
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Nimesh Kumar Johari - [@github](https://github.com/NimeshJohari02) - nimeshjohari95@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
+Project Link: [https://github.com/dyte-submissions/dyte-vit-2022-NimeshJohari02](https://github.com/github_username/repo_namehttps://github.com/dyte-submissions/dyte-vit-2022-NimeshJohari02)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
+## Badges
+
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
+
